@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1000013940885558}
+  m_IsPrefabParent: 1
+--- !u!1 &1000013940885558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000011428798358}
+  - 114: {fileID: 114000010597921804}
+  m_Layer: 0
+  m_Name: FactoryPrefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4000011428798358
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013940885558}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &114000010597921804
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013940885558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ed1c125aee154474a699dd0a64352e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoldierPrefab: {fileID: 1000010652093314, guid: d0558b5b4800143bdab02826cefb3808,
+    type: 2}
+  ControlPointPrefab: {fileID: 1000013743577054, guid: db93755b8340f49138105b3b0b67b3e8,
+    type: 2}
+  TurretPrefab: {fileID: 1000013073281014, guid: 4d0dcffa1440246c99bf3285c762e29b,
+    type: 2}
+  BarrierPrefab: {fileID: 1000013938370118, guid: f1fb544c2b4c343089e0d07122f9ab9d,
+    type: 2}
+  DecalPrefab: {fileID: 1000010842182900, guid: b5c148cb2218a42a7a0f941e8e8a3ccf,
+    type: 2}
+  BloodParticlePrefab: {fileID: 100000, guid: b50f056f01dea4e349577bbd2dd271f6, type: 2}
+  BulletImpactParticlePrefab: {fileID: 1000013920296442, guid: c33f5a60254d4402faed6d45c7b6e6a3,
+    type: 2}
+  ExplosionSmokeParticlePrefab: {fileID: 1000010492151682, guid: c0e22a63f5a3846bebec889da8acee95,
+    type: 2}
+  ExplosionFireParticlePrefab: {fileID: 1000011789741380, guid: 63efda66de3ff4dc89dda21c5047b2e7,
+    type: 2}
+  SpawnParticlePrefab: {fileID: 1000010888160862, guid: 794f01f01da834154875c92d0acbcdcc,
+    type: 2}
+  ResourceParticlePrefab: {fileID: 1000012631806616, guid: 76d8657cde38044c3ba0df91a3f3b520,
+    type: 2}
+  LightGlowPrefab: {fileID: 1000011380064362, guid: 6c756c3d6a5ec47d9b04cbfc917d1fc4,
+    type: 2}
+  EnemyAIPrefab: {fileID: 1000010060715236, guid: b5456e8a7e91846eaa0e5c5e1c799b0d,
+    type: 2}
