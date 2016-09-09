@@ -16,6 +16,7 @@ public enum Difficulty
     Hard
 }
 
+
 public enum LightGlowType
 {
     Muzzle,
