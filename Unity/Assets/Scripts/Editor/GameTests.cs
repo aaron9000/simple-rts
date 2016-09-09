@@ -211,5 +211,24 @@ namespace UnityTest
             var spawnLane = EnemyAI.GetSpawnLaneKey(a, q);
             Assert.AreEqual("0", spawnLane);
         }
+
+		[Test]
+		public void ProbabilitiesTest()
+		{
+			var pA = new [] {1f, 0f, 0f};
+			var pB = new [] {0f, 1f, 0f};
+			var pC = new [] {1f, 1f, 0f};
+
+			for (var i = 0; i < 10; i++){
+				var a = M.SampleFromProbabilities(pA);
+				Assert.AreEqual(a, 0);
+
+				var b = M.SampleFromProbabilities(pB);
+				Assert.AreEqual(b, 1);
+
+				var c = M.SampleFromProbabilities(pC);
+				Assert.AreEqual(c == 0 || c == 1, true);
+			}				
+		}
     }
 }

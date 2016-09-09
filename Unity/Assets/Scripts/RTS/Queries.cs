@@ -12,6 +12,7 @@ public class Queries
     private Dictionary<string, BaseUnitState> _unitsById = new Dictionary<string, BaseUnitState>();
     private Dictionary<string, List<BaseUnitState>> _unitsByLane = new Dictionary<string, List<BaseUnitState>>();
     private Dictionary<string, LaneMetrics> _metricsByLane = new Dictionary<string, LaneMetrics>();
+    private GameMetrics _gameMetrics = new GameMetrics();
 
     public Queries()
     {
@@ -45,6 +46,7 @@ public class Queries
         {
             _metricsByLane.Add(laneKey, CalculateLaneMetrics(laneKey));
         }
+        _gameMetrics.Rebuild(_metricsByLane);
     }
 
     public List<BaseUnitState> GetUnitsByLaneKey(string laneKey, Func<BaseUnitState, bool> filter)
@@ -148,6 +150,31 @@ public class Queries
         }, new LaneMetrics(), units);
     }
 
+    public class GameMetrics
+    {
+
+        public bool PlayerHasBase;
+        public bool EnemyHasBase;
+        public int PlayerBaseCount;
+        public int EnemyBaseCount;
+
+        public GameMetrics()
+        {
+
+        }
+
+        public void Rebuild(Dictionary<string, LaneMetrics> laneMetrics)
+        {
+            var metrics = F.Map(k => laneMetrics[k], laneMetrics.Keys);
+            PlayerBaseCount = metrics.Count(m => m.PlayerBaseHealthPercentage > 0f);
+            EnemyBaseCount = metrics.Count(m => m.PlayerBaseHealthPercentage > 0f);
+            PlayerHasBase = PlayerBaseCount > 0;
+            EnemyHasBase = EnemyBaseCount > 0;
+        }
+
+    }
+
+
     public LaneMetrics GetLaneMetrics(string laneKey)
     {
         return _metricsByLane[laneKey];
@@ -179,7 +206,7 @@ public class Queries
             var desiredEnemyUnits = PlayerUnits * 1.1f;
             if (EnemyUnits >= desiredEnemyUnits)
             {
-                return 0.0f;
+                return EnemyUnits > 0 ? 0.0f : 0.1f;
             }
             return Mathf.Clamp01(1f - EnemyUnits / desiredEnemyUnits);
         }

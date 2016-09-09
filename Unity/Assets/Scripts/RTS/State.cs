@@ -138,26 +138,24 @@ public class TurretState : BaseUnitState
 
 public class GameState
 {
-    public Side Winner;
-    public Difficulty Difficulty;
-    public List<SoldierState> Soldiers;
-    public List<ControlPointState> ControlPoints;
-    public List<TurretState> Turrets;
+
+    public List<SoldierState> Soldiers = new List<SoldierState>();
+    public List<ControlPointState> ControlPoints = new List<ControlPointState>();
+    public List<TurretState> Turrets = new List<TurretState>();
     public EnemyAIState EnemyAI;
-    public int PlayerResources;
-    public int EnemyResources;
+    public Side Winner = Side.Neutral;
+    public Difficulty Difficulty = Difficulty.Easy;
+    public int PlayerResources = BalanceConsts.StartingResources;
+    public int EnemyResources = BalanceConsts.StartingResources;
+
+
     public GameState()
     {
     }
 
     public GameState(Difficulty d)
     {
-        Winner = Side.Neutral;
         Difficulty = d;
-        Soldiers = new List<SoldierState>();
-        ControlPoints = new List<ControlPointState>();
-        Turrets = new List<TurretState>();
-        PlayerResources = EnemyResources = BalanceConsts.StartingResources;
     }
 
     // TODO: wish there was a deep clone
@@ -169,7 +167,7 @@ public class GameState
             Difficulty = Difficulty,
             PlayerResources = PlayerResources,
             EnemyResources = EnemyResources,
-            EnemyAI = EnemyAI,
+            EnemyAI = F.ShallowCloneObject(EnemyAI),
             Soldiers = F.DeepCloneObjectCollection<SoldierState, List<SoldierState>>(Soldiers),
             ControlPoints = F.DeepCloneObjectCollection<ControlPointState, List<ControlPointState>>(ControlPoints),
             Turrets = F.DeepCloneObjectCollection<TurretState, List<TurretState>> (Turrets)
