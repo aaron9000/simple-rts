@@ -46,7 +46,6 @@ public class TurretBehaviour : MonoBehaviour
         var explosion = new Events.ExplosionEvent(pos, BalanceConsts.TurretSplashDamage,
             BalanceConsts.TurretSplashRadius, 1.0f, State.LaneKey, State.Side);
         Game.PushEvent(explosion);
-        Game.PushEvent(new Events.CheckGameEndEvent());
         State.ShootCooldown = BalanceConsts.TurretAttackCooldown;
         State.TargetId = target.Id;
     }
@@ -67,6 +66,7 @@ public class TurretBehaviour : MonoBehaviour
             Game.PushEvent(explosion);
             var sound = new Events.PlaySoundEvent(SoundType.TurretShoot, fireDelay);
             Game.PushEvent(sound);
+            Game.PushEvent(new Events.CheckGameEndEvent());
             return 0;
         }, F.Range(0, 3));
     }
