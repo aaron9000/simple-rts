@@ -33,16 +33,6 @@ public static class Map
             var enemyTurretPos = GetTurretSpawnPosition(laneIndex, Side.Enemy);
             spawns.Add(new Events.SpawnEvent(enemyTurretPos, enemyAngle, Side.Enemy, laneKey, ObjectType.UnitTurret));
 
-//            // Add starting soldiers
-//            for (var i = 0; i < Soldiers; i++)
-//            {
-//                var playerPos = GetSoldierSpawnPosition(laneIndex, Side.Player);
-//                spawns.Add(new Events.SpawnEvent(playerPos, playerAngle, Side.Player, laneKey, ObjectType.UnitSoldier));
-//
-//                var enemyPos = GetSoldierSpawnPosition(laneIndex, Side.Enemy);
-//                spawns.Add(new Events.SpawnEvent(enemyPos, enemyAngle, Side.Enemy, laneKey, ObjectType.UnitSoldier));
-//            }
-
             // Add Control points
             var center = GetLaneCenterX(laneIndex);
             var controlPoints = F.Map(
@@ -77,7 +67,7 @@ public static class Map
     public static Vector2 GetTurretSpawnPosition(int laneIndex, Side side)
     {
         var x = GetLaneCenterX(laneIndex);
-        var w = 128.0f;
+        var w = 130.0f;
         var y = side == Side.Player ? w : ScreenConsts.HeightInPixels - w;
         return new Vector2(x, y);
     }
@@ -85,9 +75,9 @@ public static class Map
     public static Vector2 GetSoldierSpawnPosition(int laneIndex, Side side)
     {
         var x = GetLaneCenterX(laneIndex);
-        var w = 320;
+        var w = 340;
         var y = side == Side.Player ? w : ScreenConsts.HeightInPixels - w;
-        var o = M.NormalizedRadialSpread() * 30.0f;
+        var o = M.NormalizedRadialSpread() * 0.0f; // TODO: fix this
         return new Vector2(x, y) + o;
     }
 

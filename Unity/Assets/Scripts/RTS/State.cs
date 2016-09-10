@@ -61,21 +61,6 @@ public class LightGlowState : BaseState
     }
 }
 
-public class ControlPointState : BaseUnitState
-{
-    public float ProductionCooldown;
-
-    public ControlPointState()
-    {
-        UnitType = UnitType.ControlPoint;
-    }
-
-    public ControlPointState(Events.SpawnEvent e) : base(e)
-    {
-        UnitType = UnitType.ControlPoint;
-    }
-}
-
 public class BaseUnitState : BaseState
 {
     public float ShootCooldown = 0;
@@ -93,9 +78,23 @@ public class BaseUnitState : BaseState
     }
 }
 
+public class ControlPointState : BaseUnitState
+{
+    public float ProductionCooldown;
+
+    public ControlPointState()
+    {
+        UnitType = UnitType.ControlPoint;
+    }
+
+    public ControlPointState(Events.SpawnEvent e) : base(e)
+    {
+        UnitType = UnitType.ControlPoint;
+    }
+}
+
 public class SoldierState : BaseUnitState
 {
-
     public SoldierState()
     {
         Health = BalanceConsts.SoldierHealth;
@@ -112,52 +111,51 @@ public class SoldierState : BaseUnitState
 public class EnemyAIState : BaseState
 {
     public float SpawnCooldown = 3.0f;
+
     public EnemyAIState()
     {
-
     }
 }
 
 public class TurretState : BaseUnitState
 {
-
+    public float ProductionCooldown;
 
     public TurretState()
     {
         Health = BalanceConsts.TurretHealth;
         UnitType = UnitType.Turret;
+        ProductionCooldown = BalanceConsts.ControlPointProductionCooldown * (0.8f + 0.2f * Random.value);
     }
 
     public TurretState(Events.SpawnEvent e) : base(e)
     {
         Health = BalanceConsts.TurretHealth;
         UnitType = UnitType.Turret;
+        ProductionCooldown = BalanceConsts.ControlPointProductionCooldown * (0.8f + 0.2f * Random.value);
     }
 }
 
 
 public class GameState
 {
-    public Side Winner;
-    public Difficulty Difficulty;
-    public List<SoldierState> Soldiers;
-    public List<ControlPointState> ControlPoints;
-    public List<TurretState> Turrets;
-    public EnemyAIState EnemyAI;
-    public int PlayerResources;
-    public int EnemyResources;
+    public List<SoldierState> Soldiers = new List<SoldierState>();
+    public List<ControlPointState> ControlPoints = new List<ControlPointState>();
+    public List<TurretState> Turrets = new List<TurretState>();
+    public EnemyAIState EnemyAI = null;
+    public Side Winner = Side.Neutral;
+    public Difficulty Difficulty = Difficulty.Easy;
+    public int PlayerResources = BalanceConsts.StartingResources;
+    public int EnemyResources = BalanceConsts.StartingResources;
+
+
     public GameState()
     {
     }
 
     public GameState(Difficulty d)
     {
-        Winner = Side.Neutral;
         Difficulty = d;
-        Soldiers = new List<SoldierState>();
-        ControlPoints = new List<ControlPointState>();
-        Turrets = new List<TurretState>();
-        PlayerResources = EnemyResources = BalanceConsts.StartingResources;
     }
 
     // TODO: wish there was a deep clone
@@ -169,10 +167,10 @@ public class GameState
             Difficulty = Difficulty,
             PlayerResources = PlayerResources,
             EnemyResources = EnemyResources,
-            EnemyAI = EnemyAI,
+            EnemyAI = F.ShallowCloneObject(EnemyAI),
             Soldiers = F.DeepCloneObjectCollection<SoldierState, List<SoldierState>>(Soldiers),
             ControlPoints = F.DeepCloneObjectCollection<ControlPointState, List<ControlPointState>>(ControlPoints),
-            Turrets = F.DeepCloneObjectCollection<TurretState, List<TurretState>> (Turrets)
+            Turrets = F.DeepCloneObjectCollection<TurretState, List<TurretState>>(Turrets)
         };
     }
 }

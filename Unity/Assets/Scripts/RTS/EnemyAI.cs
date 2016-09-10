@@ -7,17 +7,18 @@ using System.Linq;
 public static class EnemyAI
 {
 
-    public static int GetChoicesForDifficulty(Difficulty difficulty)
+    public static float[] GetDistributionForDifficulty(Difficulty difficulty)
     {
         switch (difficulty)
         {
             case Difficulty.VeryEasy:
+                return new float[] {0.4f, 0.3f, 0.3f};
             case Difficulty.Easy:
-                return 3;
+                return new float[] {0.5f, 0.3f, 0.2f};
             case Difficulty.Medium:
-                return 2;
+                return new float[] {0.6f, 0.3f, 0.1f};
             default:
-                return 1;
+                return new float[] {0.7f, 0.2f, 0.1f};
         }
     }
 
@@ -26,13 +27,13 @@ public static class EnemyAI
         switch (difficulty)
         {
             case Difficulty.VeryEasy:
-                return 1.25f;
+                return 1.0f;
             case Difficulty.Easy:
                 return 0.75f;
             case Difficulty.Medium:
-                return 0.55f;
+                return 0.50f;
             default:
-                return 0.35f;
+                return 0.3f;
         }
     }
 
@@ -50,13 +51,17 @@ public static class EnemyAI
             }
             return accum;
         }, listOfTuples, lanes);
+        if (tuples.Count == 0)
+        {
+            return null;
+        }
         var shuffledTuples = F.ShuffleList(tuples.ToList());
         var sorted = shuffledTuples.OrderByDescending(a => a.Second)
             .ToList();
-        var choices = sorted.Take(GetChoicesForDifficulty(state.Difficulty))
-            .ToList();
-        return F.ShuffleList(choices)
-            .First()
-            .First;
+        var distribution = GetDistributionForDifficulty(state.Difficulty)
+            .Take(sorted.Count)
+            .ToArray();
+        var index = M.SampleFromProbabilities(distribution);
+        return sorted[index].First;
     }
 }

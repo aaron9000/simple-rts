@@ -100,14 +100,14 @@ public static class Game
         ProcessEventsAndSync();
     }
 
-    public static GameState State()
+    public static GameState State
     {
-        return _publicState;
+        get { return _publicState; }
     }
 
-    public static Queries Queries()
+    public static Queries Queries
     {
-        return _publicQueries;
+        get { return _publicQueries; }
     }
 
     public static void PushEvent(BaseEvent e)

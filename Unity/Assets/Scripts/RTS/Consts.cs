@@ -3,9 +3,9 @@ using System.Collections;
 
 public enum Side
 {
+    Neutral,
     Enemy,
-    Player,
-    Neutral
+    Player
 }
 
 public enum Difficulty
@@ -15,6 +15,7 @@ public enum Difficulty
     Medium,
     Hard
 }
+
 
 public enum LightGlowType
 {

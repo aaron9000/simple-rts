@@ -37,7 +37,6 @@ public class LightGlowBehaviour : MonoBehaviour {
 
     void Update()
     {
-
         _livetime -= Time.deltaTime;
 
         SpriteRenderer.material.color = new Color(1, 1, 1, _duration / _duration);

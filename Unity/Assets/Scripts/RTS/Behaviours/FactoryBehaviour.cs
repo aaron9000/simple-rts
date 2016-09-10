@@ -19,7 +19,7 @@ public class FactoryBehaviour : MonoBehaviour
 
     private static FactoryBehaviour _instance;
 
-    #region Internal Helpers
+    #region Private Instance Methods
 
     private void _instantiatePrefabWithNoState(GameObject prefab, Vector2 pos)
     {
@@ -162,15 +162,6 @@ public class FactoryBehaviour : MonoBehaviour
 
     #endregion
 
-    #region Unity Lifecycle
-
-    void Awake()
-    {
-        _instance = this;
-    }
-
-    #endregion
-
     #region Private Static Methods
 
     private static BaseState _getStateForSpawnEvent(Events.SpawnEvent e)
@@ -259,6 +250,15 @@ public class FactoryBehaviour : MonoBehaviour
         {
             _instance._spawnObject(e, objectState);
         }
+    }
+
+    #endregion
+
+    #region Unity Lifecycle
+
+    void Awake()
+    {
+        _instance = this;
     }
 
     #endregion
