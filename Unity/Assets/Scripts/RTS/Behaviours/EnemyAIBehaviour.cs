@@ -14,7 +14,7 @@ public class EnemyAIBehaviour : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	    var state = Game.State();
+	    var state = Game.State;
 	    var difficulty = state.Difficulty;
 	    var money = state.EnemyResources;
 
@@ -28,7 +28,7 @@ public class EnemyAIBehaviour : MonoBehaviour
 	    }
 	    else
 	    {
-	        var laneKey = EnemyAI.GetSpawnLaneKey(state, Game.Queries());
+	        var laneKey = EnemyAI.GetSpawnLaneKey(state, Game.Queries);
 	        var e = new Events.PurchaseEvent(Side.Enemy, Int32.Parse(laneKey));
 	        Game.PushEvent(e);
 	        State.SpawnCooldown = EnemyAI.GetCooldownForDifficulty(difficulty);

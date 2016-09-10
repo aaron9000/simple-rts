@@ -17,7 +17,7 @@ public class TurretBehaviour : MonoBehaviour
 
     private F.Tuple<BaseUnitState, float> _getTargetingData()
     {
-        var target = Game.Queries().GetNearestUnit(State, BalanceConsts.TurretAttackDistance);
+        var target = Game.Queries.GetNearestUnit(State, BalanceConsts.TurretAttackDistance);
         if (target == null)
         {
             return null;

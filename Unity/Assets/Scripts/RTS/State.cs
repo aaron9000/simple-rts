@@ -95,7 +95,6 @@ public class BaseUnitState : BaseState
 
 public class SoldierState : BaseUnitState
 {
-
     public SoldierState()
     {
         Health = BalanceConsts.SoldierHealth;
@@ -112,16 +111,14 @@ public class SoldierState : BaseUnitState
 public class EnemyAIState : BaseState
 {
     public float SpawnCooldown = 3.0f;
+
     public EnemyAIState()
     {
-
     }
 }
 
 public class TurretState : BaseUnitState
 {
-
-
     public TurretState()
     {
         Health = BalanceConsts.TurretHealth;
@@ -138,11 +135,10 @@ public class TurretState : BaseUnitState
 
 public class GameState
 {
-
     public List<SoldierState> Soldiers = new List<SoldierState>();
     public List<ControlPointState> ControlPoints = new List<ControlPointState>();
     public List<TurretState> Turrets = new List<TurretState>();
-    public EnemyAIState EnemyAI;
+    public EnemyAIState EnemyAI = null;
     public Side Winner = Side.Neutral;
     public Difficulty Difficulty = Difficulty.Easy;
     public int PlayerResources = BalanceConsts.StartingResources;
@@ -170,7 +166,7 @@ public class GameState
             EnemyAI = F.ShallowCloneObject(EnemyAI),
             Soldiers = F.DeepCloneObjectCollection<SoldierState, List<SoldierState>>(Soldiers),
             ControlPoints = F.DeepCloneObjectCollection<ControlPointState, List<ControlPointState>>(ControlPoints),
-            Turrets = F.DeepCloneObjectCollection<TurretState, List<TurretState>> (Turrets)
+            Turrets = F.DeepCloneObjectCollection<TurretState, List<TurretState>>(Turrets)
         };
     }
 }

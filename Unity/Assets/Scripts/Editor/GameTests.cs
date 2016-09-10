@@ -40,7 +40,7 @@ namespace UnityTest
             Game.ProcessEvents();
 
             // Assert soldier 0 was damaged
-            var updatedGameState = Game.State();
+            var updatedGameState = Game.State;
             Assert.AreEqual(updatedGameState.Soldiers[1].Health, 5.0f);
         }
 
@@ -58,7 +58,7 @@ namespace UnityTest
             var a = new GameState(Difficulty.Easy);
             a.Soldiers = new List<SoldierState>(new[] {unitA, unitB, unitC});
             Game.LoadFromState(a);
-            var lookups = Game.Queries();
+            var lookups = Game.Queries;
             Func<BaseUnitState, bool> enemyFilter = v => v.Id != unitA.Id && v.Side != unitA.Side;
             Func<BaseUnitState, bool> anyFilter = v => true;
             var closestEnemyQuery = new Queries.NearestUnit
@@ -82,10 +82,10 @@ namespace UnityTest
                 PreferredId = null,
                 SearchFrom = unitA.Position
             };
-            var closesetEnemy = lookups.GetNearestUnitWithPreference(closestEnemyQuery, enemyFilter);
-            var preferredEnemy = lookups.GetNearestUnitWithPreference(preferredEnemyQuery, enemyFilter);
-            var nonexistentEnemy = lookups.GetNearestUnitWithPreference(nonexistentEnemyQuery, enemyFilter);
-            var self = lookups.GetNearestUnitWithPreference(closestEnemyQuery, anyFilter);
+            var closesetEnemy = lookups.GetNearestUnit(closestEnemyQuery, enemyFilter);
+            var preferredEnemy = lookups.GetNearestUnit(preferredEnemyQuery, enemyFilter);
+            var nonexistentEnemy = lookups.GetNearestUnit(nonexistentEnemyQuery, enemyFilter);
+            var self = lookups.GetNearestUnit(closestEnemyQuery, anyFilter);
             Assert.AreEqual(closesetEnemy.Id, "1");
             Assert.AreEqual(preferredEnemy.Id, "2");
             Assert.AreEqual(self.Id, "0");
@@ -108,7 +108,7 @@ namespace UnityTest
                 new SoldierState {Side = Side.Enemy, Id = "3", LaneKey = "0", Position = posD}
             });
             Game.LoadFromState(a);
-            var b = Game.State();
+            var b = Game.State;
             var unitA = b.Soldiers[0];
             var unitB = b.Soldiers[1];
             var unitC = b.Soldiers[2];
@@ -127,7 +127,7 @@ namespace UnityTest
                 new SoldierState {Side = Side.Player, Id = "0", LaneKey = "0", Position = Vector2.zero}
             });
             Game.LoadFromState(a);
-            var b = Game.State();
+            var b = Game.State;
             var unitA = b.Soldiers[0];
             Assert.AreNotEqual(unitA.Position, Vector2.zero);
         }
@@ -166,7 +166,7 @@ namespace UnityTest
             Game.ProcessEvents();
 
             // Damage player turret in lane 0
-            var b = Game.State();
+            var b = Game.State;
             var t = b.Turrets[0];
             var s = b.Soldiers[0];
             var e = new Events.SoldierAttackEvent(s.Id, t.Id, BalanceConsts.TurretHealth * 0.25f);
@@ -182,8 +182,8 @@ namespace UnityTest
             // Default test map
             _setupMap();
 
-            var a = Game.State();
-            var q = Game.Queries();
+            var a = Game.State;
+            var q = Game.Queries;
             var lane0 = q.GetLaneMetrics("0");
             var lane1 = q.GetLaneMetrics("1");
 

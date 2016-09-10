@@ -31,7 +31,7 @@ public class ControlPointBehaviour : MonoBehaviour
 	    var capDist = BalanceConsts.ControlPointCaptureDistance;
 	    var ul = new Vector2(laneWidth * -0.5f, -capDist) + State.Position;
 	    var rect = new Rect(ul, new Vector2(laneWidth, capDist * 2f));
-	    var tuples = Game.Queries().GetNearestUnitTuples(q, s => s.UnitType == UnitType.Soldier);
+	    var tuples = Game.Queries.GetNearestUnitTuples(q, s => s.UnitType == UnitType.Soldier);
 	    var soldiers = F.Map(t => t.Second, tuples);
 	    var hasEnemy = soldiers.Any(s => s.Side == Side.Enemy && rect.Contains(s.Position));
 	    var hasPlayer = soldiers.Any(s => s.Side == Side.Player && rect.Contains(s.Position));

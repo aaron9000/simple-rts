@@ -24,7 +24,7 @@ public class SoldierBehaviour : MonoBehaviour
 
     private F.Tuple<BaseUnitState, float> _getTargetingData()
     {
-        var target = Game.Queries().GetNearestUnit(State, BalanceConsts.SoldierAttackDistance);
+        var target = Game.Queries.GetNearestUnit(State, BalanceConsts.SoldierAttackDistance);
         if (target == null)
         {
             return null;

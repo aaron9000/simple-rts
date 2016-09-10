@@ -6,20 +6,35 @@ using UnityEngine.UI;
 
 public class HUDBehaviour : MonoBehaviour
 {
+    // Blackout
+    public GameObject BlackoutPanel;
+
+    // Top panel
+    public GameObject TopPanel;
+    public GameObject MoneyPanel;
+    public GameObject MoneyIcon;
+    public Text MoneyText;
+    public Text RateText;
+
+    // Messages
+    public GameObject MessagePanel;
+    public Text MessageText;
+
+    // Bottom panel
+    public GameObject BottomPanel;
     public Button Lane0Button;
     public Button Lane1Button;
     public Button Lane2Button;
-    public Text MoneyText;
-    public Text MessageText;
-    public GameObject MoneyPanel;
-    public GameObject MessagePanel;
-    public GameObject BlackoutPanel;
 
+    // Timer variables
     private float _blackoutTime = 1.0f;
     private float _messageLivetime;
     private float _moneyAnimTime;
 
+    // Singleton instance
     private static HUDBehaviour _instance;
+
+    #region Event Handlers
 
     public void Click0()
     {
@@ -41,6 +56,10 @@ public class HUDBehaviour : MonoBehaviour
         Application.LoadLevel(Scene.Menu);
     }
 
+    #endregion
+
+    #region Private Helpers
+
     private void _spawnInLane(int laneIndex)
     {
         EventSystem.current.SetSelectedGameObject(null);
@@ -60,19 +79,8 @@ public class HUDBehaviour : MonoBehaviour
         _messageLivetime = livetime;
     }
 
-    // Use this for initialization
-    void Start()
+    private void _updateBlackout()
     {
-        _instance = this;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        var money = Game.State().PlayerResources;
-        var queries = Game.Queries();
-
-        // Blackout
         _blackoutTime -= Time.deltaTime;
         var b = BlackoutPanel.GetComponent<CanvasRenderer>();
         if (_blackoutTime > 0)
@@ -83,24 +91,33 @@ public class HUDBehaviour : MonoBehaviour
         {
             BlackoutPanel.SetActive(false);
         }
+    }
 
-        // Fade out message
+    private void _updateMessage()
+    {
         _messageLivetime -= Time.deltaTime;
         var a = Mathf.Clamp01(_messageLivetime / 2.0f);
         MessagePanel.GetComponent<CanvasRenderer>().SetAlpha(a);
         MessageText.color = U.ChangeAlpha(MessageText.color, a);
+    }
 
-        // Update money text
+    private void _updateMoney()
+    {
+        var money = Game.State.PlayerResources;
+        var income = Game.Queries.GetGameMetrics().PlayerIncome;
         _moneyAnimTime -= Time.deltaTime;
-        MoneyText.text = "$" + money;
-        MoneyText.color = money > 0 ? Color.white : Color.grey;
+        MoneyText.text = money.ToString();
+        RateText.text = "+" + income;
         var scale = _moneyAnimTime > 0f
             ? Vector3.one * (1f + _moneyAnimTime)
             : Vector3.one;
-        MoneyText.transform.localScale = scale;
-        MoneyPanel.GetComponent<CanvasRenderer>().transform.localScale = scale;
+        MoneyIcon.transform.localScale = scale;
+    }
 
-        // Change state of buttons
+    private void _updateBuyButtons()
+    {
+        var money = Game.State.PlayerResources;
+        var queries = Game.Queries;
         var m0 = queries.GetLaneMetrics("0");
         var m1 = queries.GetLaneMetrics("1");
         var m2 = queries.GetLaneMetrics("2");
@@ -108,6 +125,27 @@ public class HUDBehaviour : MonoBehaviour
         _setButtonEnabled(Lane1Button, money > 0 && m1.PlayerBaseHealthPercentage > 0);
         _setButtonEnabled(Lane2Button, money > 0 && m2.PlayerBaseHealthPercentage > 0);
     }
+
+    #endregion
+
+    #region Unity Lifecycle
+
+    void Start()
+    {
+        _instance = this;
+    }
+
+    void Update()
+    {
+        _updateBlackout();
+        _updateMessage();
+        _updateMoney();
+        _updateBuyButtons();
+    }
+
+    #endregion
+
+    #region Static Methods
 
     public static void ShowMessage(string message)
     {
@@ -156,4 +194,6 @@ public class HUDBehaviour : MonoBehaviour
             _instance._moneyAnimTime = 0.5f;
         }
     }
+
+    #endregion
 }

@@ -7,8 +7,6 @@ using System.Linq;
 
 public class Queries
 {
-
-
     private Dictionary<string, BaseUnitState> _unitsById = new Dictionary<string, BaseUnitState>();
     private Dictionary<string, List<BaseUnitState>> _unitsByLane = new Dictionary<string, List<BaseUnitState>>();
     private Dictionary<string, LaneMetrics> _metricsByLane = new Dictionary<string, LaneMetrics>();
@@ -89,7 +87,7 @@ public class Queries
         return a.ToList();
     }
 
-    public BaseUnitState GetNearestUnitWithPreference(NearestUnit parameters, Func<BaseUnitState, bool> filter)
+    public BaseUnitState GetNearestUnit(NearestUnit parameters, Func<BaseUnitState, bool> filter)
     {
         var a = GetNearestUnitTuples(parameters, filter);
         var preferredId = parameters.PreferredId;
@@ -110,7 +108,7 @@ public class Queries
             PreferredId = fromUnit.TargetId,
             SearchFrom = fromUnit.Position
         };
-        return GetNearestUnitWithPreference(q, unit =>
+        return GetNearestUnit(q, unit =>
         {
             return unit.Id != fromUnit.Id &&
                    unit.Side != fromUnit.Side &&
@@ -150,17 +148,22 @@ public class Queries
         }, new LaneMetrics(), units);
     }
 
+    public GameMetrics GetGameMetrics()
+    {
+        return _gameMetrics;
+    }
+
     public class GameMetrics
     {
-
         public bool PlayerHasBase;
         public bool EnemyHasBase;
         public int PlayerBaseCount;
         public int EnemyBaseCount;
+        public int PlayerIncome;
+        public int EnemyIncome;
 
         public GameMetrics()
         {
-
         }
 
         public void Rebuild(Dictionary<string, LaneMetrics> laneMetrics)
@@ -168,10 +171,11 @@ public class Queries
             var metrics = F.Map(k => laneMetrics[k], laneMetrics.Keys);
             PlayerBaseCount = metrics.Count(m => m.PlayerBaseHealthPercentage > 0f);
             EnemyBaseCount = metrics.Count(m => m.PlayerBaseHealthPercentage > 0f);
+            EnemyIncome = metrics.Sum(m => m.EnemyControlledPoints) + EnemyBaseCount;
+            PlayerIncome = metrics.Sum(m => m.PlayerControlledPoints) + PlayerBaseCount;
             PlayerHasBase = PlayerBaseCount > 0;
             EnemyHasBase = EnemyBaseCount > 0;
         }
-
     }
 
 
@@ -182,9 +186,9 @@ public class Queries
 
     public class LaneMetrics
     {
+        public int UncontrolledPoints;
         public int EnemyControlledPoints;
         public int PlayerControlledPoints;
-        public int UncontrolledPoints;
         public int PlayerUnits;
         public int EnemyUnits;
         public float EnemyBaseHealthPercentage;
@@ -241,5 +245,4 @@ public class Queries
         {
         }
     }
-
 }
