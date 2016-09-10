@@ -275,8 +275,6 @@ public class Events
             }
             if (point.Side == Side.Player)
             {
-                var e = new SpawnEvent(point.Position, ObjectType.ParticleResource);
-                FactoryBehaviour.SpawnObject(e, state);
                 state.PlayerResources++;
                 HUDBehaviour.AnimateMoneyCounter();
             }

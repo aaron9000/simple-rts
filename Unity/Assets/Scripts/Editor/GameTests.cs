@@ -208,8 +208,6 @@ namespace UnityTest
             var militaryValue1 = lane1.GetMilitaryValue();
             Assert.AreEqual(militaryValue1, 0.0);
 
-            var spawnLane = EnemyAI.GetSpawnLaneKey(a, q);
-            Assert.AreEqual("0", spawnLane);
         }
 
 		[Test]

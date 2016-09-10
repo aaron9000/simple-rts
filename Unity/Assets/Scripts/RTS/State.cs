@@ -61,21 +61,6 @@ public class LightGlowState : BaseState
     }
 }
 
-public class ControlPointState : BaseUnitState
-{
-    public float ProductionCooldown;
-
-    public ControlPointState()
-    {
-        UnitType = UnitType.ControlPoint;
-    }
-
-    public ControlPointState(Events.SpawnEvent e) : base(e)
-    {
-        UnitType = UnitType.ControlPoint;
-    }
-}
-
 public class BaseUnitState : BaseState
 {
     public float ShootCooldown = 0;
@@ -90,6 +75,21 @@ public class BaseUnitState : BaseState
     public BaseUnitState(Events.SpawnEvent e) : base(e)
     {
         Angle = e.Angle;
+    }
+}
+
+public class ControlPointState : BaseUnitState
+{
+    public float ProductionCooldown;
+
+    public ControlPointState()
+    {
+        UnitType = UnitType.ControlPoint;
+    }
+
+    public ControlPointState(Events.SpawnEvent e) : base(e)
+    {
+        UnitType = UnitType.ControlPoint;
     }
 }
 
@@ -119,16 +119,20 @@ public class EnemyAIState : BaseState
 
 public class TurretState : BaseUnitState
 {
+    public float ProductionCooldown;
+
     public TurretState()
     {
         Health = BalanceConsts.TurretHealth;
         UnitType = UnitType.Turret;
+        ProductionCooldown = BalanceConsts.ControlPointProductionCooldown * (0.8f + 0.2f * Random.value);
     }
 
     public TurretState(Events.SpawnEvent e) : base(e)
     {
         Health = BalanceConsts.TurretHealth;
         UnitType = UnitType.Turret;
+        ProductionCooldown = BalanceConsts.ControlPointProductionCooldown * (0.8f + 0.2f * Random.value);
     }
 }
 

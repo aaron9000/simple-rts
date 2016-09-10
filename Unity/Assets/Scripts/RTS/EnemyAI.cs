@@ -41,7 +41,6 @@ public static class EnemyAI
     {
         var lanes = F.Range(0, BalanceConsts.Lanes);
         var listOfTuples = new List<F.Tuple<string, float>>();
-        var distribution = GetDistributionForDifficulty(state.Difficulty);
         var tuples = F.Reduce((accum, i) =>
         {
             var laneKey = i.ToString();
@@ -52,9 +51,16 @@ public static class EnemyAI
             }
             return accum;
         }, listOfTuples, lanes);
+        if (tuples.Count == 0)
+        {
+            return null;
+        }
         var shuffledTuples = F.ShuffleList(tuples.ToList());
         var sorted = shuffledTuples.OrderByDescending(a => a.Second)
             .ToList();
+        var distribution = GetDistributionForDifficulty(state.Difficulty)
+            .Take(sorted.Count)
+            .ToArray();
         var index = M.SampleFromProbabilities(distribution);
         return sorted[index].First;
     }

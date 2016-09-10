@@ -55,18 +55,17 @@ public void ProcessEventsTest()
     var gameState = new GameState(Difficulty.Easy);
     gameState.Soldiers.AddRange(new[]
     {
-        new SoldierState {Side = Side.Enemy, Id = "0", Health = 10},
-        new SoldierState {Side = Side.Player, Id = "1",  Health = 10}
+        new SoldierState {Side = Side.Enemy, Id = "0", Health = 10f},
+        new SoldierState {Side = Side.Player, Id = "1",  Health = 10f}
     });
     Game.LoadFromState(gameState);
 
     // Push attack event & process
-    Game.PushEvent(new Events.SoldierAttackEvent("0", "1", 5));
+    Game.PushEvent(new Events.SoldierAttackEvent("0", "1", 5f));
     Game.ProcessEvents();
 
     // Assert soldier 0 was damaged
-    var updatedGameState = Game.State();
-    Assert.AreEqual(updatedGameState.Soldiers[1].Health, 5.0f);
+    Assert.AreEqual(Game.State.Soldiers[1].Health, 5.0f);
 }
 ```
 
