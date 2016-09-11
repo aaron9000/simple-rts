@@ -6,17 +6,17 @@ public static class Map
 {
     public static List<BaseEvent> GetMapSpawnEvents()
     {
-
-
         var spawns = new List<BaseEvent>();
+        var playerAngle = GetFaceAngle(Side.Player);
+        var enemyAngle = GetFaceAngle(Side.Enemy);
 
+        // Add enemy player AI
         spawns.Add(new Events.SpawnEvent(Vector2.zero, ObjectType.EnemyAI));
 
+        // Add turrets, control points, and barriers
         foreach (var laneIndex in F.Range(0, BalanceConsts.Lanes))
         {
             var laneKey = laneIndex.ToString();
-            var playerAngle = GetFaceAngle(Side.Player);
-            var enemyAngle = GetFaceAngle(Side.Enemy);
             var rightEdge = GetRightEdgeOfLane(laneIndex);
 
             // Add barrier
@@ -29,7 +29,6 @@ public static class Map
             // Turrets
             var playerTurretPos = GetTurretSpawnPosition(laneIndex, Side.Player);
             spawns.Add(new Events.SpawnEvent(playerTurretPos, playerAngle, Side.Player, laneKey, ObjectType.UnitTurret));
-
             var enemyTurretPos = GetTurretSpawnPosition(laneIndex, Side.Enemy);
             spawns.Add(new Events.SpawnEvent(enemyTurretPos, enemyAngle, Side.Enemy, laneKey, ObjectType.UnitTurret));
 
@@ -75,10 +74,9 @@ public static class Map
     public static Vector2 GetSoldierSpawnPosition(int laneIndex, Side side)
     {
         var x = GetLaneCenterX(laneIndex);
-        var w = 340;
+        var w = 340f;
         var y = side == Side.Player ? w : ScreenConsts.HeightInPixels - w;
-        var o = M.NormalizedRadialSpread() * 0.0f; // TODO: fix this
-        return new Vector2(x, y) + o;
+        return new Vector2(x, y);
     }
 
     public static float GetLaneWidth()

@@ -9,7 +9,6 @@ public class LightGlowBehaviour : MonoBehaviour {
     private float _duration = 1.0f;
     private float _livetime = 1.0f;
 
-
     void Start()
     {
         SpriteRenderer = GetComponent<SpriteRenderer>();

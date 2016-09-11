@@ -209,7 +209,7 @@ public class FactoryBehaviour : MonoBehaviour
     private static void _updateInternalState(Events.SpawnEvent e, BaseState objectState, GameState privateState)
     {
         // Assign a temporary Id (so unit tests play nice)
-        objectState.Id = Random.Range(1, 100000).ToString();
+        objectState.Id = Random.Range(1, 1000000).ToString();
 
         switch (e.ObjectType)
         {

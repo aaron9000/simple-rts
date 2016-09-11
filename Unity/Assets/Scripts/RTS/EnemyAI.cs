@@ -12,13 +12,13 @@ public static class EnemyAI
         switch (difficulty)
         {
             case Difficulty.VeryEasy:
-                return new float[] {0.4f, 0.3f, 0.3f};
+                return new [] {0.4f, 0.3f, 0.3f};
             case Difficulty.Easy:
-                return new float[] {0.5f, 0.3f, 0.2f};
+                return new [] {0.5f, 0.3f, 0.2f};
             case Difficulty.Medium:
-                return new float[] {0.6f, 0.3f, 0.1f};
+                return new [] {0.6f, 0.3f, 0.1f};
             default:
-                return new float[] {0.7f, 0.2f, 0.1f};
+                return new [] {0.7f, 0.2f, 0.1f};
         }
     }
 
