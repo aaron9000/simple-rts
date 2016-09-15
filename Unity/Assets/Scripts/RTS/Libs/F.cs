@@ -325,6 +325,14 @@ public static class F
 
     #region Map
 
+    public static void Loop<T>(Action<T> loopAction, IEnumerable<T> collection)
+    {
+        foreach (var v in collection)
+        {
+            loopAction(v);
+        }
+    }
+
     public static TOutputElement[] MapObject<TOutputElement>(Func<string, object, TOutputElement> mappingFunction,
         object obj)
     {

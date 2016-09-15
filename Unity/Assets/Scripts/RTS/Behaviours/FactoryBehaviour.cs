@@ -21,14 +21,14 @@ public class FactoryBehaviour : MonoBehaviour
 
     #region Private Instance Methods
 
-    private void _instantiatePrefabWithNoState(GameObject prefab, Vector2 pos)
+    private void _instantiatePrefabWithNoState(Vector3 pos, GameObject prefab)
     {
         var a = Instantiate(prefab);
         var v = Map.ConvertToWorldCoordinates(pos);
-        a.transform.position = new Vector3(v.x, v.y, ParticleConsts.Z);
+        a.transform.position = new Vector3(v.x, v.y, pos.z);
     }
 
-    private void _instantiatePrefabAndAssignState<TBehaviour>(GameObject prefab, BaseState state)
+    private void _instantiatePrefabAndAssignState<TBehaviour>(BaseState state, GameObject prefab)
         where TBehaviour : MonoBehaviour
     {
         var a = Instantiate(prefab);
@@ -38,51 +38,51 @@ public class FactoryBehaviour : MonoBehaviour
         F.SetValue("State", state, b);
     }
 
-    private void _spawnObjectWithState(ObjectType objectType, BaseState objectState, GameObject prefab)
+    private void _instantiatePrefabWithState(ObjectType objectType, BaseState objectState, GameObject prefab)
     {
         switch (objectType)
         {
             // Units
             case ObjectType.UnitControlPoint:
-                _instantiatePrefabAndAssignState<ControlPointBehaviour>(prefab, objectState);
+                _instantiatePrefabAndAssignState<ControlPointBehaviour>(objectState, prefab);
                 break;
             case ObjectType.UnitSoldier:
-                _instantiatePrefabAndAssignState<SoldierBehaviour>(prefab, objectState);
+                _instantiatePrefabAndAssignState<SoldierBehaviour>(objectState, prefab);
                 break;
             case ObjectType.UnitTurret:
-                _instantiatePrefabAndAssignState<TurretBehaviour>(prefab, objectState);
+                _instantiatePrefabAndAssignState<TurretBehaviour>(objectState, prefab);
                 break;
 
             // Map + Scenery
             case ObjectType.MapBarrier:
-                _instantiatePrefabAndAssignState<BarrierBehaviour>(prefab, objectState);
+                _instantiatePrefabAndAssignState<BarrierBehaviour>(objectState, prefab);
                 break;
 
             // Misc
             case ObjectType.EnemyAI:
-                _instantiatePrefabAndAssignState<EnemyAIBehaviour>(prefab, objectState);
+                _instantiatePrefabAndAssignState<EnemyAIBehaviour>(objectState, prefab);
                 break;
 
             // Decal
             case ObjectType.DecalBlood:
-                _instantiatePrefabAndAssignState<DecalBehaviour>(prefab, objectState);
+                _instantiatePrefabAndAssignState<DecalBehaviour>(objectState, prefab);
                 break;
             case ObjectType.DecalExplosion:
-                _instantiatePrefabAndAssignState<DecalBehaviour>(prefab, objectState);
+                _instantiatePrefabAndAssignState<DecalBehaviour>(objectState, prefab);
                 break;
             case ObjectType.DecalBullet:
-                _instantiatePrefabAndAssignState<DecalBehaviour>(prefab, objectState);
+                _instantiatePrefabAndAssignState<DecalBehaviour>(objectState, prefab);
                 break;
 
             // Lights
             case ObjectType.LightMuzzle:
-                _instantiatePrefabAndAssignState<LightGlowBehaviour>(prefab, objectState);
+                _instantiatePrefabAndAssignState<LightGlowBehaviour>(objectState, prefab);
                 break;
             case ObjectType.LightExplosion:
-                _instantiatePrefabAndAssignState<LightGlowBehaviour>(prefab, objectState);
+                _instantiatePrefabAndAssignState<LightGlowBehaviour>(objectState, prefab);
                 break;
             case ObjectType.LightTurretMuzzle:
-                _instantiatePrefabAndAssignState<LightGlowBehaviour>(prefab, objectState);
+                _instantiatePrefabAndAssignState<LightGlowBehaviour>(objectState, prefab);
                 break;
         }
     }
@@ -139,9 +139,8 @@ public class FactoryBehaviour : MonoBehaviour
     }
 
 
-    private void _spawnObject(Events.SpawnEvent e, BaseState objectState)
+    private void _spawnPrefab(Vector3 position, ObjectType objectType, BaseState objectState)
     {
-        var objectType = e.ObjectType;
         var prefab = _instance._getPrefabForObjectType(objectType);
         if (prefab == null)
         {
@@ -152,95 +151,21 @@ public class FactoryBehaviour : MonoBehaviour
         // Spawn stateful or stateless object
         if (objectState != null)
         {
-            _instance._spawnObjectWithState(e.ObjectType, objectState, prefab);
+            _instance._instantiatePrefabWithState(objectType, objectState, prefab);
         }
         else
         {
-            _instance._instantiatePrefabWithNoState(prefab, e.Position);
+            _instance._instantiatePrefabWithNoState(position, prefab);
         }
     }
 
     #endregion
 
-    #region Private Static Methods
-
-    private static BaseState _getStateForSpawnEvent(Events.SpawnEvent e)
-    {
-        switch (e.ObjectType)
-        {
-            // Units
-            case ObjectType.UnitControlPoint:
-                return new ControlPointState(e);
-            case ObjectType.UnitSoldier:
-                return new SoldierState(e);
-            case ObjectType.UnitTurret:
-                return new TurretState(e);
-
-            // Map + Scenery
-            case ObjectType.MapBarrier:
-                return new BarrierState(e);
-
-            // Misc
-            case ObjectType.EnemyAI:
-                return new EnemyAIState();
-
-            // Decal
-            case ObjectType.DecalBlood:
-                return new DecalState(e, DecalType.Blood);
-            case ObjectType.DecalExplosion:
-                return new DecalState(e, DecalType.Scorch);
-            case ObjectType.DecalBullet:
-                return new DecalState(e, DecalType.Bullet);
-
-            // Lights
-            case ObjectType.LightMuzzle:
-                return new LightGlowState(e, LightGlowType.Muzzle);
-            case ObjectType.LightExplosion:
-                return new LightGlowState(e, LightGlowType.Explosion);
-            case ObjectType.LightTurretMuzzle:
-                return new LightGlowState(e, LightGlowType.TurretMuzzle);
-
-            // Particles
-            default:
-                return null;
-        }
-    }
-
-    private static void _updateInternalState(Events.SpawnEvent e, BaseState objectState, GameState privateState)
-    {
-        // Assign a temporary Id (so unit tests play nice)
-        objectState.Id = Random.Range(1, 1000000).ToString();
-
-        switch (e.ObjectType)
-        {
-            case ObjectType.UnitControlPoint:
-                privateState.ControlPoints.Add((ControlPointState) objectState);
-                break;
-            case ObjectType.UnitTurret:
-                privateState.Turrets.Add((TurretState) objectState);
-                break;
-            case ObjectType.UnitSoldier:
-                privateState.Soldiers.Add((SoldierState) objectState);
-                break;
-            case ObjectType.EnemyAI:
-                privateState.EnemyAI = (EnemyAIState) objectState;
-                break;
-        }
-    }
-
-    #endregion
 
     #region Public Static Methods
 
-    public static void SpawnObject(Events.SpawnEvent e, GameState privateState)
+    public static void SpawnPrefab(Vector3 position, ObjectType type, BaseState objectState)
     {
-        // Add new object to internal state (if it has any)
-        var objectState = _getStateForSpawnEvent(e);
-        if (objectState != null)
-        {
-            _updateInternalState(e, objectState, privateState);
-        }
-
         // Instantiate prefabs and add them to the scene (requires instance living in scene)
         if (_instance == null)
         {
@@ -248,7 +173,7 @@ public class FactoryBehaviour : MonoBehaviour
         }
         else
         {
-            _instance._spawnObject(e, objectState);
+            _instance._spawnPrefab(position, type, objectState);
         }
     }
 

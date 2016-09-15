@@ -1,20 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public static class Map
 {
     public static List<BaseEvent> GetMapSpawnEvents()
     {
-        var spawns = new List<BaseEvent>();
         var playerAngle = GetFaceAngle(Side.Player);
         var enemyAngle = GetFaceAngle(Side.Enemy);
-
-        // Add enemy player AI
-        spawns.Add(new Events.SpawnEvent(Vector2.zero, ObjectType.EnemyAI));
-
-        // Add turrets, control points, and barriers
-        foreach (var laneIndex in F.Range(0, BalanceConsts.Lanes))
+        var lanes = F.Range(0, BalanceConsts.Lanes);
+        var seedSpawns = new List<BaseEvent> {new Events.SpawnEvent(Vector2.zero, ObjectType.EnemyAI)};
+        return F.Reduce((spawns, laneIndex) =>
         {
             var laneKey = laneIndex.ToString();
             var rightEdge = GetRightEdgeOfLane(laneIndex);
@@ -34,16 +31,16 @@ public static class Map
 
             // Add Control points
             var center = GetLaneCenterX(laneIndex);
-            var controlPoints = F.Map(
-                y =>
+            var controlPoints = F.Map(y =>
                 {
                     var p = new Vector2(center, y);
                     return new Events.SpawnEvent(p, 0, Side.Neutral, laneKey, ObjectType.UnitControlPoint);
                 },
                 GetControlPointYPositions());
             spawns.AddRange(controlPoints);
-        }
-        return spawns;
+
+            return spawns;
+        }, seedSpawns, lanes).ToList();
     }
 
     public static float GetFaceAngle(Side side)

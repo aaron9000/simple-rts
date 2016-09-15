@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public static class M
 {
 
-    public static Vector2 NormalizedRadialSpread()
+    public static Vector2 RadialSpread()
     {
         var angle = Random.value * Mathf.PI * 2.0f;
         var radius = Mathf.Sqrt(Random.value);
@@ -42,5 +42,15 @@ public static class M
                 return i;
         }
         return 0;
+    }
+
+    public static Vector3 SetZ(Vector3 p, float z)
+    {
+        return new Vector3(p.x, p.y, z);
+    }
+
+    public static Vector3 SetZ(Vector2 p, float z)
+    {
+        return new Vector3(p.x, p.y, z);
     }
 }
