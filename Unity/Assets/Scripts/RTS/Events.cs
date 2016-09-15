@@ -99,12 +99,12 @@ public class Events
                 // Muzzle
                 var pos = Vector2.MoveTowards(source.Position, target.Position, PhysicsConsts.SoldierMuzzleLength);
                 var m = new SpawnEvent(pos, ObjectType.LightMuzzle);
-                FactoryBehaviour.SpawnObject(m, state);
+                Factory.Spawn(m, state);
 
                 // Hurt target
-                var impactPos = target.Position + M.NormalizedRadialSpread() * PhysicsConsts.SoldierMuzzleLength;
+                var impactPos = target.Position + M.RadialSpread() * PhysicsConsts.SoldierMuzzleLength;
                 var e = new SpawnEvent(impactPos, ObjectType.ParticleBulletImpact);
-                FactoryBehaviour.SpawnObject(e, state);
+                Factory.Spawn(e, state);
                 target.Health -= Damage;
 
                 AudioPlayerBehaviour.PlaySound(SoundType.Shoot);
@@ -143,14 +143,13 @@ public class Events
             };
             var a = queries.GetNearestUnitTuples(q, s => s.Side != Side);
             var spawns = new List<SpawnEvent>();
-            F.Reduce((accum, value) =>
+            F.Loop(value =>
             {
                 var dist = value.First;
                 var unit = value.Second;
                 var ratio = 1.0f - dist / SplashRadius;
                 unit.Health -= ratio * Damage;
-                return accum;
-            }, spawns, a);
+            }, a);
 
 
             // Explosion effect
@@ -160,10 +159,10 @@ public class Events
             spawns.Add(new SpawnEvent(Position, ObjectType.ParticleExplosionFire));
 
             // Spawn all the things
-            foreach (var spawn in spawns)
+            F.Loop(spawn =>
             {
-                FactoryBehaviour.SpawnObject(spawn, state);
-            }
+                Factory.Spawn(spawn, state);
+            }, spawns);
         }
     }
 
@@ -188,7 +187,7 @@ public class Events
                 // Muzzle
                 var muzzlePos = Vector2.MoveTowards(source.Position, target.Position, PhysicsConsts.TurretMuzzleLength);
                 var m = new SpawnEvent(muzzlePos, ObjectType.LightTurretMuzzle);
-                FactoryBehaviour.SpawnObject(m, state);
+                Factory.Spawn(m, state);
                 AudioPlayerBehaviour.PlaySound(SoundType.TurretShoot);
 
                 // Hurt target
@@ -212,8 +211,8 @@ public class Events
             var decal = new SpawnEvent(Position, ObjectType.DecalBlood);
             var blood = new SpawnEvent(Position, ObjectType.ParticleBlood);
 
-            FactoryBehaviour.SpawnObject(decal, state);
-            FactoryBehaviour.SpawnObject(blood, state);
+            Factory.Spawn(decal, state);
+            Factory.Spawn(blood, state);
 
             AudioPlayerBehaviour.PlaySound(SoundType.Splat);
         }
@@ -233,8 +232,8 @@ public class Events
             var decal = new SpawnEvent(pos, ObjectType.DecalExplosion);
             var blood = new SpawnEvent(pos, ObjectType.ParticleBlood);
 
-            FactoryBehaviour.SpawnObject(decal, state);
-            FactoryBehaviour.SpawnObject(blood, state);
+            Factory.Spawn(decal, state);
+            Factory.Spawn(blood, state);
 
             var message = String.Format("{0} base destroyed!", turret.Side == Side.Player ? "Player" : "Enemy");
             HUDBehaviour.ShowMessage(message);
@@ -311,12 +310,12 @@ public class Events
             // Spawn effect
             var p = Map.GetSoldierSpawnPosition(LaneIndex, Side);
             var e = new SpawnEvent(p, ObjectType.ParticleSpawn);
-            FactoryBehaviour.SpawnObject(e, state);
+            Factory.Spawn(e, state);
             AudioPlayerBehaviour.PlaySound(SoundType.Spawn);
 
             // Spawn a unit
             var u = new SpawnEvent(p, Random.value * 360f, Side, LaneIndex.ToString(), ObjectType.UnitSoldier);
-            FactoryBehaviour.SpawnObject(u, state);
+            Factory.Spawn(u, state);
         }
     }
 
@@ -347,7 +346,7 @@ public class Events
 
         public override void Fire(GameState state, Queries queries)
         {
-            FactoryBehaviour.SpawnObject(this, state);
+            Factory.Spawn(this, state);
         }
     }
 }

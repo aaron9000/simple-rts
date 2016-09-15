@@ -24,17 +24,18 @@ public static class Game
     {
         var a = GameObject.FindGameObjectsWithTag(objectTag);
         var b = F.Map(g => (object) g.GetComponent<TBehaviour>(), a);
-        var c = F.PluckFromObjects<TState>("State", b);
-        var d = c.ToList();
-        F.SetValue(gameStateKey, d, _privateState);
+        var c = F.PluckFromObjects<TState>("State", b).ToList();
+        F.SetValue(gameStateKey, c, _privateState);
     }
 
+    #region Game-specific code
     private static void _syncStateWithGameObjects()
     {
         _updateStateWithGameObjects<SoldierBehaviour, SoldierState>("Soldiers", ObjectTag.Soldier);
         _updateStateWithGameObjects<ControlPointBehaviour, ControlPointState>("ControlPoints", ObjectTag.ControlPoint);
         _updateStateWithGameObjects<TurretBehaviour, TurretState>("Turrets", ObjectTag.Turret);
     }
+    #endregion
 
     private static void _processEvents(bool syncStateWithGameObjects)
     {

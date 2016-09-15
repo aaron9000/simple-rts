@@ -44,7 +44,7 @@ public class TurretBehaviour : MonoBehaviour
         var shootEvent = new Events.TurretAttackEvent(State.Id, target.Id, BalanceConsts.TurretDamage);
         Game.PushEvent(shootEvent);
 
-        var pos = target.Position + M.NormalizedRadialSpread() * PhysicsConsts.SoldierRadius * 1.5f;
+        var pos = target.Position + M.RadialSpread() * PhysicsConsts.SoldierRadius * 1.5f;
         var explosion = new Events.ExplosionEvent(pos, BalanceConsts.TurretSplashDamage,
             BalanceConsts.TurretSplashRadius, 1.0f, State.LaneKey, State.Side);
         Game.PushEvent(explosion);
@@ -60,7 +60,7 @@ public class TurretBehaviour : MonoBehaviour
         var offset = State.Side == Side.Player ? 80.0f : -80f;
         F.Map(v =>
         {
-            var pos = State.Position + M.NormalizedRadialSpread() * 60.0f + Vector2.up * v * offset;
+            var pos = State.Position + M.RadialSpread() * 60.0f + Vector2.up * v * offset;
             var explosion = new Events.ExplosionEvent(pos, BalanceConsts.TurretSplashDamage,
                 BalanceConsts.TurretSplashRadius, 1.0f, State.LaneKey, State.Side);
             var fireDelay = v * 0.3f;

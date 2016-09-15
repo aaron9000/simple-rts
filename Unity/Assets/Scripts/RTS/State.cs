@@ -142,7 +142,7 @@ public class GameState
     public List<SoldierState> Soldiers = new List<SoldierState>();
     public List<ControlPointState> ControlPoints = new List<ControlPointState>();
     public List<TurretState> Turrets = new List<TurretState>();
-    public EnemyAIState EnemyAI = null;
+    public EnemyAIState EnemyAI;
     public Side Winner = Side.Neutral;
     public Difficulty Difficulty = Difficulty.Easy;
     public int PlayerResources = BalanceConsts.StartingResources;
