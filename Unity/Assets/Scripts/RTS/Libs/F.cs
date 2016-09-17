@@ -401,16 +401,6 @@ public static class F
 
     #region FromPairs
 
-//    public static ICollection<TElement> CoerceCollection<TElement>(ICollection<object> dict)
-//    {
-//        var clone = new Enumerable<TElement>();
-//        foreach (var pair in dict)
-//        {
-//            clone.Add(pair.Key, (TValue) pair.Value);
-//        }
-//        return clone;
-//    }
-
     public static Dictionary<string, TValue> CoerceDictionary<TValue>(IDictionary<string, object> dict)
     {
         var clone = new Dictionary<string, TValue>();
