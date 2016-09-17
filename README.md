@@ -84,6 +84,6 @@ The tests are written for Unity's testing framework. Open the project in the Uni
 
 
 ##Full Screenshot
-![alt text](https://s3.amazonaws.com/aaron-cdn/simple-rts/screen-1.png)
+![alt text](https://s3.amazonaws.com/aaron-cdn/simple-rts/screen-0.png)
 
 
