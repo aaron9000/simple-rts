@@ -1,10 +1,10 @@
-#Simple RTS
-A lane-based strategy game for Unity3D.
+# Simple RTS
+A lane-based strategy game for Unity3D
 
 ![alt text](https://s3.amazonaws.com/aaron-cdn/simple-rts/thumb-half.png)
 
-##Playing the Game
-#####Links & Downloads
+## Playing the Game
+##### Links & Downloads
 - Mac Standalone (540 x 960): [Download Zip](https://s3.amazonaws.com/aaron-cdn/simple-rts/simple-rts-mac-full.zip)
 - HTML5 (540 x 960): [Play in Browser](	
 https://s3.amazonaws.com/aaron-cdn/simple-rts/simple-rts-web-full/index.html)
@@ -12,20 +12,20 @@ https://s3.amazonaws.com/aaron-cdn/simple-rts/simple-rts-web-full/index.html)
 https://s3.amazonaws.com/aaron-cdn/simple-rts/simple-rts-web-reduced/index.html)
 
 
-#####Instructions
+##### Instructions
 - Destroy all 3 enemy bases to win
 - Capture and hold control points to earn resources (they glow green when captured)
 - Purchase soldiers by clicking the bottom buttons
 
-#####Pro Tips
+##### Pro Tips
 - Make sure to spend your resources quickly
 - Deprive the enemy of control points
 - Always attack in groups
 
-##The Insides
+## The Insides
 Internally, the game uses an event system to reduce interactions between game objects and simplify state management. This has a few advantages over the traditional pattern of letting game objects communicate with each other directly.
 
-#####Main Game Loop
+##### Main Game Loop
 ```c#
 using UnityEngine;
 
@@ -45,7 +45,7 @@ public class GameBehaviour : MonoBehaviour
 }
 ```
 
-#####Testing Game Code
+##### Testing Game Code
 ```c#
 [Test]
 public void ProcessEventsTest()
@@ -69,7 +69,7 @@ public void ProcessEventsTest()
 }
 ```
 
-#####Advantages:
+##### Advantages:
 - Game code is testable (even without a scene)
 - You can inspect the application's state without traversing the scene graph
 - Side effects, state mutations, and scene changes happen in one place
@@ -77,13 +77,13 @@ public void ProcessEventsTest()
 - Separation of concerns. Game objects only modify their own state and emit events
 
 
-##Running the Tests
+## Running the Tests
 The tests are written for Unity's testing framework. Open the project in the Unity3D editor to run them.
 
 `Window -> Editor Tests Runner -> Run All`
 
 
-##Full Screenshot
+## Full Screenshot
 ![alt text](https://s3.amazonaws.com/aaron-cdn/simple-rts/screen-0.png)
 
 
